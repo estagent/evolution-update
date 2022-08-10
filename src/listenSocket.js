@@ -229,6 +229,7 @@ export default async (player, entryString, opts = {}) => {
           case 'lobby.jackpots': // jackpots
           case 'lobby.playerData':
           case 'lobby.settings':
+          case 'lobby.mylist':
           case 'lobby.balanceUpdated':
           case 'lobby.playersCount':
           case 'lobby.playerTables':
