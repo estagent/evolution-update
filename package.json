@@ -1,7 +1,7 @@
 {
   "name": "@revgaming/evolution-update",
   "author": "estagent <estagent@gmail.com>",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Evolution Lobby listener",
   "homepage": "https://github.com/estagent/evolution-update",
   "main": "src/index.js",

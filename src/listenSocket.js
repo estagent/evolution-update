@@ -24,7 +24,7 @@ export default async (player, entryString, opts = {}) => {
 
   const socketTimeout = opts.socket?.timeout || 2000
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const socketURL = config.socket.url
       .replace('{SERVER_NAME}', entryURL.hostname)
       .replaceAll('{PATH}', cookies.EVOSESSIONID.slice(0, 16))
@@ -35,8 +35,9 @@ export default async (player, entryString, opts = {}) => {
       origin: entryString.replace(entryURL.search, ''),
       headers: {
         Cookie: cookieString,
-        'User-Agent':
-          player.IsMobile === 1 ? config.agent.mobile : config.agent.desktop,
+        'User-Agent': player.mobile
+          ? config.agent.mobile
+          : config.agent.desktop,
       },
       timeout: socketTimeout,
     })
@@ -49,7 +50,7 @@ export default async (player, entryString, opts = {}) => {
           args: {version: 2},
         })
       })
-      .on('message', function (text) {
+      .on('message', function(text) {
         let data = JSON.parse(text)
         switch (data.type) {
           case 'lobby.configs':
@@ -57,7 +58,7 @@ export default async (player, entryString, opts = {}) => {
               const table = data.args.configs[id]
 
               // optimization for mobile codes. supress new game creation for mobile code
-              if (player.IsMobile && id.includes(':') && !tables[id]) {
+              if (player.mobile && id.includes(':') && !tables[id]) {
                 const ids = id.split(':')
                 const mainId = ids[0]
                 const vId = ids[1]
@@ -125,7 +126,7 @@ export default async (player, entryString, opts = {}) => {
                   types.push(table.gt)
                 }
 
-                table.platforms.push(player.IsMobile ? 'Phone' : 'Desktop')
+                table.platforms.push(player.mobile ? 'Phone' : 'Desktop')
 
                 if (table['bl'] instanceof Object) {
                   table.limits[player.currency] = table['bl']
@@ -147,7 +148,7 @@ export default async (player, entryString, opts = {}) => {
                   }
                 }
 
-                const platform = player.IsMobile ? 'Phone' : 'Desktop'
+                const platform = player.mobile ? 'Phone' : 'Desktop'
 
                 if (!tables[id].platforms.includes(platform)) {
                   tables[id].platforms.push(platform)
@@ -233,6 +234,7 @@ export default async (player, entryString, opts = {}) => {
           case 'lobby.balanceUpdated':
           case 'lobby.playersCount':
           case 'lobby.playerTables':
+          case 'lobby.casinoPlayersCount': // { total: 19097 }
             break
           case 'connection.kickout':
             reject('connection.kickout')
@@ -242,7 +244,7 @@ export default async (player, entryString, opts = {}) => {
             console.info('OTHER', data.type, data.args)
         }
       })
-      .on('close', function () {
+      .on('close', function() {
         clearTimeout(timer)
         reject('closed')
       })

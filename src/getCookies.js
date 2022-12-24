@@ -9,8 +9,7 @@ const getLobbyURL = async (player, url, opts = {}) =>
     followRedirect: false,
     resolveWithFullResponse: true,
     headers: {
-      'User-Agent':
-        player.IsMobile === 1 ? config.agent.mobile : config.agent.desktop,
+      'User-Agent': player.mobile ? config.agent.mobile : config.agent.desktop,
     },
     timeout: opts.timeout || 5000,
     transform: function (body, response, resolveWithFullResponse) {
@@ -26,8 +25,7 @@ const getEvolutionCookies = async (player, url, opts = {}) =>
     followRedirect: false,
     resolveWithFullResponse: true,
     headers: {
-      'User-Agent':
-        player.IsMobile === 1 ? config.agent.mobile : config.agent.desktop,
+      'User-Agent': player.mobile ? config.agent.mobile : config.agent.desktop,
     },
     timeout: opts.timeout || 5000,
     transform: function (body, response, resolveWithFullResponse) {
